@@ -1,25 +1,14 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 
 export default function Login() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const [userInfo, setUserInfo] = useState({
-    email: "",
-    password: "",
-  });
 
   function handleSubmit(event) {
     event.preventDefault();
-    setUserInfo((prevUserInfo) => ({
-      ...prevUserInfo,
-      email: emailRef.current.value,
-      password: passwordRef.current.value,
-    }));
+    const enteredEmail = emailRef.current.value;
+    const enteredPAssword = passwordRef.current.value;
   }
-
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
 
   return (
     <form onSubmit={handleSubmit}>
