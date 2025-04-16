@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+import Input from "./Input";
+import { isEmail, isNotEmpty, hasMinLength } from "../util/validation";
+
 export default function LoginState() {
   const [userInfo, setUserInfo] = useState({
     email: "",
@@ -9,8 +12,12 @@ export default function LoginState() {
     email: false,
     password: false,
   });
+  const emailIsInvalid =
+    didEdit.email && (!isNotEmpty(userInfo.email) || !isEmail(userInfo.email));
 
-  const emailIsInvalid = didEdit.email && !userInfo.email.includes("@");
+  const passwordIsInvalid =
+    didEdit.password &&
+    (!isNotEmpty(userInfo.password) || !hasMinLength(userInfo.password, 6));
 
   function handleUserInfoChange(event) {
     const { name, value } = event.target;
@@ -31,31 +38,29 @@ export default function LoginState() {
       <h2>Login</h2>
 
       <div className="control-row">
-        <div className="control no-margin">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            value={userInfo.email}
-            onChange={handleUserInfoChange}
-            onBlur={() => handleInputBlur("email")}
-          />
-          <div className="control-error">
-            {emailIsInvalid && <p>Please enter a valid email address!</p>}
-          </div>
-        </div>
-
-        <div className="control no-margin">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            value={userInfo.password}
-            onChange={handleUserInfoChange}
-          />
-        </div>
+        <Input
+          label="email"
+          id="email"
+          type="email"
+          name="email"
+          value={userInfo.email}
+          onChange={handleUserInfoChange}
+          onBlur={() => handleInputBlur("email")}
+          error={emailIsInvalid && "Please enter a valid email"}
+        />
+        <Input
+          label="password"
+          id="password"
+          type="password"
+          name="password"
+          value={userInfo.password}
+          onChange={handleUserInfoChange}
+          onBlur={() => handleInputBlur("password")}
+          error={
+            passwordIsInvalid &&
+            "Please enter a password of more than 6 characters"
+          }
+        />
       </div>
 
       <p className="form-actions">
